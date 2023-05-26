@@ -2,6 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer base {
+  body {
+    @apply font-medium overflow-hidden;
+  }
+
+  h1 {
+    @apply text-[3.4rem] leading-[70px];
+  }
+
+  h2 {
+    @apply text-[2.40rem] leading-[55px] font-semibold;
+  }
+
+  h3 {
+    @apply text-[1.65rem] leading-[35px] font-semibold;
+  }
+
+  h4 {
+    @apply text-[1.35rem] leading-[30px] font-semibold;
+  }
+
+  h5 {
+    @apply text-2xl leading-[70px];
+  }
+
+  p {
+    @apply text-base;
+  }
+}
+
+.cus-container {
+  @apply container mx-auto px-10
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -17,11 +52,6 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: black;
+  background: #ffff
 }
