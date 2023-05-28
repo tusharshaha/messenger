@@ -29,7 +29,7 @@
   }
 
   p {
-    @apply text-base;
+    @apply text-base leading-[10px];
   }
 }
 

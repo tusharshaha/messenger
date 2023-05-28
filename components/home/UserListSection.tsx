@@ -41,7 +41,7 @@ const UserListSection: React.FC = () => {
     {icon: "icon", name: "Tushar Kumar Shaha", message: "new message"},
   ]
   return (
-    <div className='w-25 max-h-screen overflow-y-auto scroll-smooth scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-blue-300 pe-4'>
+    <div className='w-25 max-h-screen overflow-y-auto scroll-smooth scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-blue-300 p-4'>
       <div className='flex flex-col gap-4'>
         {
           userList.map((ele, i)=> <div key={i} className='flex items-center gap-2'>

@@ -2,10 +2,10 @@ import React from 'react';
 
 const MessageSection: React.FC = () => {
   return (
-    <div className='grow'>
+    <div className='grow max-h-screen flex flex-col justify-between'>
       {/* top bar  */}
-      <div className='flex items-center justify-between'>
-        <div className='flex items-center gap-2'>
+      <div className='flex items-center justify-between border-b border-blue-400 sticky top-0'>
+        <div className='flex items-center gap-2 px-4 py-2'>
           <span>icon</span>
           <div>
             <h4>Mijanur Rahaman</h4>
@@ -15,6 +15,17 @@ const MessageSection: React.FC = () => {
         <div className='flex gap-2 items-center'>
           <span>call</span>
           <span>video</span>
+        </div>
+      </div>
+      {/* bottom bar  */}
+      <div className='sticky bottom-0 px-4 py-2'>
+        <div className='flex'>
+          <div>
+            <span>icon</span>
+            <span>icon</span>
+            <span>icon</span>
+          </div>
+          <input type="text" placeholder='Aa' className='rounded-full px-4 grow bg-neutral-700'/>
         </div>
       </div>
     </div>
