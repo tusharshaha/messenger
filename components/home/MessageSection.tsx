@@ -19,8 +19,8 @@ const MessageSection: React.FC = () => {
       </div>
       {/* bottom bar  */}
       <div className='sticky bottom-0 px-4 py-2'>
-        <div className='flex'>
-          <div>
+        <div className='flex gap-2 items-center'>
+          <div className='flex gap-2 items-center'>
             <span>icon</span>
             <span>icon</span>
             <span>icon</span>
