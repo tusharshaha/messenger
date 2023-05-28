@@ -9,7 +9,7 @@ const MessageSection: React.FC = () => {
           <span>icon</span>
           <div>
             <h4>Mijanur Rahaman</h4>
-            <span className='font-normal text-slate-500'>Active Now</span>
+            <span className='font-normal text-slate-300'>Active Now</span>
           </div>
         </div>
         <div className='flex gap-2 items-center'>

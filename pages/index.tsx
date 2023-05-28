@@ -4,7 +4,7 @@ import React from 'react';
 
 const Home: React.FC = () => {
   return (
-    <div className='flex'>
+    <div className='flex gap-4 p-4'>
       <UserListSection></UserListSection>
       <MessageSection></MessageSection>
     </div>
