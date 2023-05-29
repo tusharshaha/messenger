@@ -1,6 +1,7 @@
 import React from 'react';
 import { ImAttachment } from "react-icons/im";
 import { BsEmojiSmile } from "react-icons/bs";
+import { IoSend } from "react-icons/io5";
 
 const MessageSection: React.FC = () => {
   return (
@@ -21,13 +22,13 @@ const MessageSection: React.FC = () => {
       </div>
       {/* bottom bar  */}
       <div className='sticky bottom-0 px-4 py-2'>
-        <div className='flex gap-2 items-center'>
+        <div className='flex gap-4 items-center'>
           <div className='relative flex grow'>
-            <button className='text-slate-400 absolute top-3 left-5'><ImAttachment /></button>
+            <button className='text-blue-400 absolute top-3 left-5'><ImAttachment /></button>
             <input type="text" placeholder='Write a message ...' className='rounded-full ps-12 py-2 focus:outline-0 bg-neutral-700 grow' />
-            <button className='text-slate-400 absolute top-3 right-5'><BsEmojiSmile /></button>
+            <button className='text-blue-400 absolute top-3 right-5'><BsEmojiSmile /></button>
           </div>
-          <span>send</span>
+          <button className='text-blue-400 text-2xl'><IoSend /></button>
         </div>
       </div>
     </div>
