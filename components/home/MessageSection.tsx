@@ -1,4 +1,6 @@
 import React from 'react';
+import { ImAttachment } from "react-icons/im";
+import { BsEmojiSmile } from "react-icons/bs";
 
 const MessageSection: React.FC = () => {
   return (
@@ -20,12 +22,12 @@ const MessageSection: React.FC = () => {
       {/* bottom bar  */}
       <div className='sticky bottom-0 px-4 py-2'>
         <div className='flex gap-2 items-center'>
-          <div className='flex gap-2 items-center'>
-            <span>icon</span>
-            <span>icon</span>
-            <span>icon</span>
+          <div className='relative flex grow'>
+            <button className='text-slate-400 absolute top-3 left-5'><ImAttachment /></button>
+            <input type="text" placeholder='Write a message ...' className='rounded-full ps-12 py-2 focus:outline-0 bg-neutral-700 grow' />
+            <button className='text-slate-400 absolute top-3 right-5'><BsEmojiSmile /></button>
           </div>
-          <input type="text" placeholder='Aa' className='rounded-full px-4 grow bg-neutral-700'/>
+          <span>send</span>
         </div>
       </div>
     </div>
