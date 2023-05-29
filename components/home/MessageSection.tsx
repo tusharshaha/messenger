@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ImAttachment } from "react-icons/im";
 import { BsEmojiSmile } from "react-icons/bs";
 import { IoSend, IoCall, IoVideocam } from "react-icons/io5";
 import Image from 'next/image';
+import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 
 const MessageSection: React.FC = () => {
+  const [showEmoji, setShowEmoji] = useState(false);
+  const [message, setMessage] = useState("");
+  const handleEmojiPicker = () => {
+    setShowEmoji(prev => !prev);
+  }
+  const handleEmojiClick = (emoji: EmojiClickData) => {
+    let msg = message;
+    msg += emoji.emoji;
+    setMessage(msg);
+  }
   return (
     <div className='grow max-h-screen flex flex-col justify-between'>
       {/* top bar  */}
@@ -27,9 +38,25 @@ const MessageSection: React.FC = () => {
       <div className='sticky bottom-0 px-4 py-2'>
         <div className='flex gap-4 items-center'>
           <div className='relative flex grow'>
-            <button className='text-blue-400 absolute top-3 left-5'><ImAttachment /></button>
-            <input type="text" placeholder='Write a message ...' className='rounded-full ps-12 py-2 focus:outline-0 bg-neutral-700 grow' />
-            <button className='text-blue-400 absolute top-3 right-5'><BsEmojiSmile /></button>
+            <button className='text-blue-400 absolute top-3 left-5'>
+              <ImAttachment />
+            </button>
+            <input
+              type="text" placeholder='Write a message ...'
+              className='rounded-full ps-12 py-2 focus:outline-0 bg-neutral-700 grow'
+              value={message} onChange={(e)=>setMessage(e.target.value)}
+            />
+            <button onClick={handleEmojiPicker} className='text-blue-400 absolute top-3 right-5'>
+              <BsEmojiSmile />
+            </button>
+            {/* emoji picker  */}
+            {
+              showEmoji && <div className='absolute bottom-16 right-10'><EmojiPicker
+                theme={Theme.DARK}
+                width={340} height={360}
+                onEmojiClick={handleEmojiClick}
+              /></div>
+            }
           </div>
           <button className='text-blue-400 text-2xl'><IoSend /></button>
         </div>
