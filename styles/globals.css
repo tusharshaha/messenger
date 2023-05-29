@@ -5,7 +5,7 @@
 
 @layer base {
   body {
-    @apply font-medium overflow-hidden;
+    @apply font-medium overflow-hidden text-slate-200;
   }
 
   h1 {
@@ -21,15 +21,18 @@
   }
 
   h4 {
-    @apply text-[1.25rem] leading-[25px] font-semibold;
+    @apply text-[1.10rem] leading-[15px] font-semibold;
   }
 
   h5 {
-    @apply text-[1rem] leading-[20px];
+    @apply text-[0.95rem] leading-[15px];
   }
 
   p {
     @apply text-base leading-[10px];
+  }
+  span {
+    @apply text-[0.80rem] font-thin
   }
 }
 
@@ -53,7 +56,6 @@
 }
 
 body {
-  color: #ffff;
   background: var(--bg-color);
 }
 
