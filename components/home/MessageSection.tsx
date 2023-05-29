@@ -65,7 +65,7 @@ const MessageSection: React.FC = () => {
             </button>
             <input
               type="text" placeholder='Write a message ...'
-              className='rounded-full ps-12 pe-4 py-2 focus:outline-0 bg-neutral-700 grow'
+              className='rounded-full ps-12 pe-4 py-2 focus:outline-0 bg-neutral-700 w-full'
               onKeyDown={handleKeyDown}
               value={message} onChange={(e) => setMessage(e.target.value)}
             />

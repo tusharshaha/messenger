@@ -28,7 +28,7 @@ const UserListSection: React.FC = () => {
   ]
   return (
     <div className='w-25 max-h-screen overflow-y-auto scroll-smooth scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-blue-300 py-4 px-2'>
-      <div className='flex flex-col gap-4'>
+      <div className='flex flex-col gap-2'>
         {
           userList.map((ele, i) => <div key={i} className='flex items-center gap-2 rounded p-2 hover:bg-zinc-700 cursor-pointer'>
             <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
