@@ -63,7 +63,6 @@ body {
 
 .EmojiPickerReact li.epr-emoji-category>.epr-emoji-category-label {
   font-size: 12px !important;
-  /* font-weight: ; */
 }
 
 ::-webkit-scrollbar{
