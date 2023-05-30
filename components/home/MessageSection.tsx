@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BsEmojiSmile } from "react-icons/bs";
 import { IoSend, IoCall, IoVideocam } from "react-icons/io5";
 import Image from 'next/image';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
+import { WebsocketContext } from '@/context/websocket.context';
 
 const MessageSection: React.FC = () => {
+  const socket = useContext(WebsocketContext);
   const [showEmoji, setShowEmoji] = useState(false);
   const [message, setMessage] = useState("");
+
+  useEffect(()=>{
+    socket.on("connect",()=>{
+      console.log("connected");
+    });
+    socket.on("message", (data)=>{
+      console.log(data);
+    })
+    return () => {
+      console.log("unregister");
+      socket.off("connect");
+      socket.off("message");
+    }
+  },[])
   
   const handleEmojiPicker = () => {
     setShowEmoji(prev => !prev);
