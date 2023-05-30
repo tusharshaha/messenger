@@ -3,10 +3,18 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { IoSend, IoCall, IoVideocam } from "react-icons/io5";
 import Image from 'next/image';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:5000');
+
 
 const MessageSection: React.FC = () => {
   const [showEmoji, setShowEmoji] = useState(false);
   const [message, setMessage] = useState("");
+  
+  socket.on('message', message => {
+    console.log(`Received message: ${message}`);
+  });
 
   const handleEmojiPicker = () => {
     setShowEmoji(prev => !prev);
@@ -25,6 +33,8 @@ const MessageSection: React.FC = () => {
       const updatedMsg = message.replace(regex, " ");
       return setMessage(updatedMsg);
     }
+    socket.emit('message', message);
+    return setMessage('');
   }
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -36,6 +46,8 @@ const MessageSection: React.FC = () => {
         const updatedMsg = message.replace(regex, " ");
         return setMessage(updatedMsg);
       }
+      socket.emit('message', message);
+      return setMessage('');
     }
   };
   return (
@@ -75,6 +87,8 @@ const MessageSection: React.FC = () => {
                 theme={Theme.DARK}
                 width={340} height={360}
                 onEmojiClick={handleEmojiClick}
+                previewConfig={{showPreview: false}}
+                skinTonesDisabled
               /></div>
             }
           </div>

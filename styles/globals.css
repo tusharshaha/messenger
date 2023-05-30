@@ -60,6 +60,12 @@ body {
   background: var(--bg-color);
 }
 
+
+.EmojiPickerReact li.epr-emoji-category>.epr-emoji-category-label {
+  font-size: 12px !important;
+  /* font-weight: ; */
+}
+
 ::-webkit-scrollbar{
   width: 14px;
 }
