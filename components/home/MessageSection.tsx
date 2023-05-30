@@ -26,6 +26,7 @@ const MessageSection: React.FC = () => {
   }
 
   const handleSendMessage = () => {
+    if(message.length !> 0) return;
     const regex = /(?:\b(?:https?|ftp|file):\/\/)?(?:www\.)?\S+\.\S+\b/gi;
 
     if (regex.test(message)) {
@@ -39,6 +40,7 @@ const MessageSection: React.FC = () => {
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
+      if(message.length !> 0) return;
       const regex = /(?:\b(?:https?|ftp|file):\/\/)?(?:www\.)?\S+\.\S+\b/gi;
 
       if (regex.test(message)) {
