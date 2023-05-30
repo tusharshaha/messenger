@@ -34,14 +34,16 @@ const MessageSection: React.FC = () => {
   }
 
   const handleSendMessage = () => {
-    if(message.length !> 0) return;
+    if(message.length <= 0) return;
     const regex = /(?:\b(?:https?|ftp|file):\/\/)?(?:www\.)?\S+\.\S+\b/gi;
 
     if (regex.test(message)) {
       alert("Your message is suspicious!");
-      const updatedMsg = message.replace(regex, " ");
+      const updatedMsg = message.replace(regex, "");
       return setMessage(updatedMsg);
     }
+    socket.emit("message", message);
+    return setMessage('');
   }
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -51,9 +53,11 @@ const MessageSection: React.FC = () => {
 
       if (regex.test(message)) {
         alert("Your message is suspicious!");
-        const updatedMsg = message.replace(regex, " ");
+        const updatedMsg = message.replace(regex, "");
         return setMessage(updatedMsg);
       }
+      socket.emit("message", message);
+      return setMessage('');
     }
   };
   return (
