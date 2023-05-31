@@ -1,5 +1,6 @@
 import MessageSection from '@/components/home/MessageSection';
 import UserListSection from '@/components/home/UserListSection';
+import privateRoute from '@/utils/privateRoute';
 import React from 'react';
 
 const Home: React.FC = () => {
@@ -11,4 +12,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default privateRoute(Home);
