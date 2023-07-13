@@ -49,16 +49,7 @@ const MessageSection: React.FC = () => {
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if(message.length === 0) return;
-      const regex = /(?:\b(?:https?|ftp|file):\/\/)?(?:www\.)?\S+\.\S+\b/gi;
-
-      if (regex.test(message)) {
-        alert("Your message is suspicious!");
-        const updatedMsg = message.replace(regex, "");
-        return setMessage(updatedMsg);
-      }
-      socket.emit("message", message);
-      return setMessage('');
+      handleSendMessage();
     }
   };
   return (
