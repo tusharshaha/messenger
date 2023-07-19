@@ -1,9 +1,12 @@
-import { RootState } from '@/redux/store';
+import { addUser } from '@/redux/features/user.reducer';
+import { AppDispatch, RootState } from '@/redux/store';
 import axiosRequest from '@/utils/axios.service';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 
 interface IFormInput {
   name: string;
@@ -14,20 +17,25 @@ interface IFormInput {
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
   const [loading, setLoading] = useState(false);
-  const [apiError, setApiError] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const onSubmit: SubmitHandler<IFormInput> = async data => {
     try {
       setLoading(true);
       const res = await axiosRequest.post('/auth/signup', data);
-      console.log(res.data)
+      dispatch(addUser(res.data));
       setLoading(false);
+      router.replace("/")
     } catch (err: any) {
-      setApiError(err.message)
-      console.log(err)
+      Swal.fire({
+        icon: "error",
+        title: err.message,
+        timer: 1800,
+        showConfirmButton: false
+      })
     }
   };
   const user = useSelector((state: RootState) => state.auth.user);
-  const router = useRouter();
 
   if (!!user) {
     router.replace("/")
