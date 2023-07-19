@@ -5,7 +5,7 @@ import React from 'react';
 
 const Home: React.FC = () => {
   return (
-    <div className='flex'>
+    <div className='flex h-[100vh]'>
       <UserListSection></UserListSection>
       <MessageSection></MessageSection>
     </div>

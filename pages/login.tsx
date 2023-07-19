@@ -1,6 +1,5 @@
 import { addUser } from '@/redux/features/user.reducer';
 import { AppDispatch, RootState } from '@/redux/store';
-import axiosRequest from '@/utils/axios.service';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -20,20 +19,20 @@ const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const onSubmit: SubmitHandler<IFormInput> = async data => {
-    try {
-      setLoading(true);
-      const res = await axiosRequest.post('/auth/signup', data);
-      dispatch(addUser(res.data));
-      setLoading(false);
-      router.replace("/")
-    } catch (err: any) {
-      Swal.fire({
-        icon: "error",
-        title: err.message,
-        timer: 1800,
-        showConfirmButton: false
-      })
-    }
+    // try {
+    //   setLoading(true);
+    //   const res = await axiosRequest.post('/auth/signup', data);
+    //   dispatch(addUser(res.data));
+    //   setLoading(false);
+    //   router.replace("/")
+    // } catch (err: any) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: err.message,
+    //     timer: 1800,
+    //     showConfirmButton: false
+    //   })
+    // }
   };
   const user = useSelector((state: RootState) => state.auth.user);
 
