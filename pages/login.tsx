@@ -16,14 +16,19 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');
   const onSubmit: SubmitHandler<IFormInput> = async data => {
-    setLoading(true);
-    const res = await axiosRequest.post('/auth/signup', data);
-    console.log(res.data)
-    setLoading(false);
+    try {
+      setLoading(true);
+      const res = await axiosRequest.post('/auth/signup', data);
+      console.log(res.data)
+      setLoading(false);
+    } catch (err: any) {
+      setApiError(err.message)
+      console.log(err)
+    }
   };
   const user = useSelector((state: RootState) => state.auth.user);
   const router = useRouter();
-  
+
   if (!!user) {
     router.replace("/")
     return <h1>Loading...</h1>
@@ -41,8 +46,8 @@ const Login = () => {
 
           <input type='password' {...register("password", { required: true, pattern: /^(?=.*[a-z])(?=.*\d).{6,}$/ })} className='focus:outline-0 border-4 border-indigo-600 py-1 px-4 rounded mb-5' placeholder='Your Password' />{errors.password && <span className='text-red-400 text-start mt-[-15px] mb-2'>Minimum of 6 characters, including 1 number and 1 lowercase letter</span>}
 
-          <button type='submit' className="px-5 py-2 bg-indigo-600 transition duration-300 hover:bg-indigo-700 text-white uppercase rounded flex items-center justify-center gap-2">
-            {loading && <span className='inline-block w-[20px] h-[20px] rounded-full border-4 border-blue-400 border-t-blue-200 animate-spin'/>}
+          <button type='submit' disabled={loading} className="px-5 py-2 bg-indigo-600 transition duration-300 hover:bg-indigo-700 text-white uppercase rounded flex items-center justify-center gap-2">
+            {loading && <span className='inline-block w-[20px] h-[20px] rounded-full border-4 border-blue-400 border-t-blue-200 animate-spin' />}
             Create User
           </button>
         </form>
