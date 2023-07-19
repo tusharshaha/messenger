@@ -5,6 +5,12 @@ interface UserData {
   avatar: string
 }
 
+interface UserBody {
+  name: string,
+  email: string,
+  password: string
+}
+
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
@@ -13,8 +19,15 @@ export const userApi = createApi({
   endpoints: (builder) => ({
     getUsers: builder.query<UserData[], void>({
       query: () => "/auth/getAllUser"
+    }),
+    signup: builder.mutation<UserData, UserBody>({
+      query: (data: UserBody) => ({
+        url: "/auth/signup",
+        method: "POST",
+        body: data
+      })
     })
   })
 })
 
-export const { useGetUsersQuery } = userApi;
+export const { useGetUsersQuery, useSignupMutation } = userApi;

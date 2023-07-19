@@ -1,11 +1,12 @@
+import { useSignupMutation } from '@/redux/api/apiSlice';
 import { addUser } from '@/redux/features/user.reducer';
 import { AppDispatch, RootState } from '@/redux/store';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
+import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import Swal from 'sweetalert2';
 
 interface IFormInput {
   name: string;
@@ -15,24 +16,25 @@ interface IFormInput {
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const [signup, { isLoading, isSuccess, isError, data }] = useSignupMutation();
   const router = useRouter();
-  const onSubmit: SubmitHandler<IFormInput> = async data => {
-    // try {
-    //   setLoading(true);
-    //   const res = await axiosRequest.post('/auth/signup', data);
-    //   dispatch(addUser(res.data));
-    //   setLoading(false);
-    //   router.replace("/")
-    // } catch (err: any) {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: err.message,
-    //     timer: 1800,
-    //     showConfirmButton: false
-    //   })
-    // }
+
+  useEffect(() => {
+    if (isLoading) {
+      toast.loading("Loading...", { id: "signup" });
+    }
+    if (isSuccess) {
+      toast.success("Successfully Signup", { id: "signup" });
+    }
+    if (isError) {
+      toast.error("Signup Failed", { id: "signup" });
+    }
+  }, [isError, isLoading, isSuccess])
+  const onSubmit: SubmitHandler<IFormInput> = async signupData => {
+    await signup(signupData);
+    dispatch(addUser(data));
+    router.replace("/");
   };
   const user = useSelector((state: RootState) => state.auth.user);
 
@@ -53,8 +55,8 @@ const Login = () => {
 
           <input type='password' {...register("password", { required: true, pattern: /^(?=.*[a-z])(?=.*\d).{6,}$/ })} className='focus:outline-0 border-4 border-indigo-600 py-1 px-4 rounded mb-5' placeholder='Your Password' />{errors.password && <span className='text-red-400 text-start mt-[-15px] mb-2'>Minimum of 6 characters, including 1 number and 1 lowercase letter</span>}
 
-          <button type='submit' disabled={loading} className="px-5 py-2 bg-indigo-600 transition duration-300 hover:bg-indigo-700 text-white uppercase rounded flex items-center justify-center gap-2">
-            {loading && <span className='inline-block w-[20px] h-[20px] rounded-full border-4 border-blue-400 border-t-blue-200 animate-spin' />}
+          <button type='submit' disabled={isLoading} className="px-5 py-2 bg-indigo-600 transition duration-300 hover:bg-indigo-700 text-white uppercase rounded flex items-center justify-center gap-2">
+            {isLoading && <span className='inline-block w-[20px] h-[20px] rounded-full border-4 border-blue-400 border-t-blue-200 animate-spin' />}
             Create User
           </button>
         </form>
