@@ -3,14 +3,14 @@ import Image from 'next/image';
 import React from 'react';
 
 const UserListSection: React.FC = () => {
-  const {data, isLoading} = useGetUsersQuery();
- console.log(data);
+  const { data, isLoading } = useGetUsersQuery();
+  console.log(data);
   return (
     <div className='w-25 overflow-y-auto scroll-smooth scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-blue-300 py-4 px-2 border-r border-slate-500'>
       <div className='flex flex-col gap-2'>
         {isLoading && <p>Loading...</p>}
         {
-          data?.map((ele, i) => <div key={i} className='flex items-center gap-2 rounded p-2 hover:bg-zinc-700 cursor-pointer'>
+          data?.map((ele, i) => <div key={i} className='flex items-center gap-2 rounded p-2 hover:bg-sky-950 cursor-pointer'>
             <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
               <Image src={ele.avatar} height={70} width={70} alt="avatar" />
             </div>

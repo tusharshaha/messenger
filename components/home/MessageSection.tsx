@@ -65,21 +65,21 @@ const MessageSection: React.FC = () => {
             <span className='font-normal text-slate-300'>Active Now</span>
           </div>
         </div>
-        <div className='flex gap-6 items-center text-2xl text-blue-400'>
+        <div className='flex gap-6 items-center text-2xl text-sky-500'>
           <button><IoCall /></button>
           <button><IoVideocam /></button>
         </div>
       </div>
       {/* bottom bar  */}
-      <div className='sticky bottom-0 px-4 py-2'>
+      <div className='sticky bottom-0 px-4 py-5'>
         <div className='flex gap-4 items-center'>
           <div className='relative flex grow'>
-            <button onClick={handleEmojiPicker} className='text-blue-400 absolute top-3 left-5'>
+            <button onClick={handleEmojiPicker} className='text-sky-400 absolute top-3 left-5'>
               <BsEmojiSmile />
             </button>
             <input
               type="text" placeholder='Write a message ...'
-              className='rounded-full ps-12 pe-4 py-2 focus:outline-0 bg-neutral-700 w-full'
+              className='rounded-full ps-12 pe-4 py-2 focus:outline-0 bg-sky-950 w-full'
               onKeyDown={handleKeyDown}
               value={message} onChange={(e) => setMessage(e.target.value)}
             />
@@ -94,7 +94,7 @@ const MessageSection: React.FC = () => {
               /></div>
             }
           </div>
-          <button onClick={handleSendMessage} className='text-blue-400 text-2xl'>
+          <button onClick={handleSendMessage} className='text-sky-500 text-2xl'>
             <IoSend />
           </button>
         </div>

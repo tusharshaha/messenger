@@ -21,7 +21,6 @@ interface Res {
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
-  const [res, setRes] = useState({} as Res);
   const dispatch = useDispatch<AppDispatch>();
   const [signup, { isLoading, isSuccess, isError }] = useSignupMutation();
   const router = useRouter();
@@ -35,7 +34,7 @@ const Login = () => {
     if (isError) {
       
     }
-  }, [isError, isLoading, isSuccess, res])
+  }, [isError, isLoading, isSuccess])
   const onSubmit: SubmitHandler<IFormInput> = async signupData => {
     signup(signupData)
       .then(data => {
