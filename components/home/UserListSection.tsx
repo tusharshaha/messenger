@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 
 const UserListSection: React.FC = () => {
-  const { data, isLoading } = useGetUsersQuery(undefined, { refetchOnMountOrArgChange: true });
+  const { data, isLoading } = useGetUsersQuery();
   return (
     <div className='w-25 overflow-y-auto scroll-smooth scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-blue-300 py-4 px-2 border-r border-slate-500'>
       <div className='flex flex-col gap-2'>

@@ -12,16 +12,19 @@ export const userApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API,
   }),
+  tagTypes: ["Users"],
   endpoints: (builder) => ({
     getUsers: builder.query<User[], void>({
-      query: () => "/auth/getAllUser"
+      query: () => "/auth/getAllUser",
+      providesTags: ["Users"]
     }),
     signup: builder.mutation<User, UserBody>({
       query: (data: UserBody) => ({
         url: "/auth/signup",
         method: "POST",
         body: data
-      })
+      }),
+      invalidatesTags: ["Users"]
     })
   })
 })
