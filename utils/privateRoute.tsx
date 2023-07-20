@@ -9,13 +9,13 @@ const privateRoute = <P extends object>(Component: React.ComponentType<P>) => {
     const user = useSelector((state: RootState) => state.auth.user);
 
     useEffect(() => {
-      if (!user) {
+      if (!user.name) {
         router.replace('/login');
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return user ? <Component {...props} /> : <></>;
+    return user.name ? <Component {...props} /> : <></>;
   };
 
   return AuthComponent;

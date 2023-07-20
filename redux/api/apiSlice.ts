@@ -1,11 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { User } from "../features/user.reducer";
 
-interface UserData {
-  name: string,
-  avatar: string
-}
-
-interface UserBody {
+export interface UserBody {
   name: string,
   email: string,
   password: string
@@ -17,10 +13,10 @@ export const userApi = createApi({
     baseUrl: process.env.NEXT_PUBLIC_API,
   }),
   endpoints: (builder) => ({
-    getUsers: builder.query<UserData[], void>({
+    getUsers: builder.query<User[], void>({
       query: () => "/auth/getAllUser"
     }),
-    signup: builder.mutation<UserData, UserBody>({
+    signup: builder.mutation<User, UserBody>({
       query: (data: UserBody) => ({
         url: "/auth/signup",
         method: "POST",

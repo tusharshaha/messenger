@@ -1,5 +1,5 @@
 import { useSignupMutation } from '@/redux/api/apiSlice';
-import { addUser } from '@/redux/features/user.reducer';
+import { User, addUser } from '@/redux/features/user.reducer';
 import { AppDispatch, RootState } from '@/redux/store';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -14,12 +14,17 @@ interface IFormInput {
   password: string;
 }
 
+interface Res {
+  error: { data: { message: string } };
+  data: User;
+}
+
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
+  const [res, setRes] = useState({} as Res);
   const dispatch = useDispatch<AppDispatch>();
-  const [signup, { isLoading, isSuccess, isError, data }] = useSignupMutation();
+  const [signup, { isLoading, isSuccess, isError }] = useSignupMutation();
   const router = useRouter();
-
   useEffect(() => {
     if (isLoading) {
       toast.loading("Loading...", { id: "signup" });
@@ -28,17 +33,24 @@ const Login = () => {
       toast.success("Successfully Signup", { id: "signup" });
     }
     if (isError) {
-      toast.error("Signup Failed", { id: "signup" });
+      
     }
-  }, [isError, isLoading, isSuccess])
+  }, [isError, isLoading, isSuccess, res])
   const onSubmit: SubmitHandler<IFormInput> = async signupData => {
-    await signup(signupData);
-    dispatch(addUser(data));
-    router.replace("/");
+    signup(signupData)
+      .then(data => {
+        const resData = data as Res;
+        console.log(resData);
+        if (resData?.error?.data.message) {
+          toast.error(resData.error?.data?.message, { id: "signup" });
+        }else {
+          dispatch(addUser(resData.data));
+        }
+      })
   };
   const user = useSelector((state: RootState) => state.auth.user);
 
-  if (!!user) {
+  if (!!user.name) {
     router.replace("/")
     return <h1>Loading...</h1>
   }

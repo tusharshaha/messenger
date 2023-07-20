@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface User {
+export interface User {
   name: string,
   avatar: string
 }
@@ -11,7 +11,7 @@ export const userAuthSlice = createSlice({
   name: "userAuth",
   initialState,
   reducers: {
-    addUser: (state, action: PayloadAction<User | undefined>) => {
+    addUser: (state, action: PayloadAction<User>) => {
       if(action.payload !== undefined){
         state.user = action.payload
       }
