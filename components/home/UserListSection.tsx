@@ -1,9 +1,26 @@
+import { WebsocketContext } from '@/context/websocket.context';
 import { useGetUsersQuery } from '@/redux/api/apiSlice';
 import Image from 'next/image';
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 
 const UserListSection: React.FC = () => {
-  const { data, isLoading } = useGetUsersQuery();
+  const { data, isLoading, refetch } = useGetUsersQuery();
+  const socket = useContext(WebsocketContext);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("connected")
+    })
+    socket.on("newUser", () => {
+      refetch();
+    })
+    return () => {
+      console.log("unregister");
+      socket.off("connect");
+      socket.off("message");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
     <div className='w-25 overflow-y-auto scroll-smooth scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-blue-300 py-4 px-2 border-r border-slate-500'>
       <div className='flex flex-col gap-2'>
