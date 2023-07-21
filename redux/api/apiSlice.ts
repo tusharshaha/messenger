@@ -6,7 +6,9 @@ export interface UserBody {
   email: string,
   password: string
 }
-
+export interface Users extends User{
+  _id: string
+}
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
@@ -14,7 +16,7 @@ export const userApi = createApi({
   }),
   tagTypes: ["Users"],
   endpoints: (builder) => ({
-    getUsers: builder.query<User[], void>({
+    getUsers: builder.query<Users[], void>({
       query: () => "/auth/getAllUser",
       providesTags: ["Users"]
     }),
