@@ -1,5 +1,6 @@
 import Layout from '@/components/home/Layout';
 import MessageSection from '@/components/home/MessageSection';
+import privateRoute from '@/utils/privateRoute';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -13,4 +14,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default privateRoute(User);

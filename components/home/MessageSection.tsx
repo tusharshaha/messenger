@@ -4,6 +4,7 @@ import { IoSend, IoCall, IoVideocam } from "react-icons/io5";
 import Image from 'next/image';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 import { WebsocketContext } from '@/context/websocket.context';
+import { toast } from 'react-hot-toast';
 
 const MessageSection: React.FC = () => {
   const socket = useContext(WebsocketContext);
@@ -39,7 +40,7 @@ const MessageSection: React.FC = () => {
     const regex = /(?:\b(?:https?|ftp|file):\/\/)?(?:www\.)?\S+\.\S+\b/gi;
 
     if (regex.test(message)) {
-      alert("Your message is suspicious!");
+      toast.error("Your Message is suspisious!");
       const updatedMsg = message.replace(regex, "");
       return setMessage(updatedMsg);
     }

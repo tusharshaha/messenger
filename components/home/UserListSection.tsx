@@ -1,15 +1,18 @@
 import { WebsocketContext } from '@/context/websocket.context';
 import { useGetUsersQuery } from '@/redux/api/apiSlice';
+import { RootState } from '@/redux/store';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const UserListSection: React.FC = () => {
   const { data, isLoading, refetch } = useGetUsersQuery();
+  const user = useSelector((state: RootState) => state.auth.user);
   const router = useRouter();
   const socket = useContext(WebsocketContext);
-
+  const filterUser = data?.filter((ele) => ele._id !== user.id)
   useEffect(() => {
     socket.on("connect", () => {
       console.log("connected")
