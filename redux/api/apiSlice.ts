@@ -6,6 +6,11 @@ export interface UserBody {
   email: string,
   password: string
 }
+interface MessageBody {
+  message: string,
+  from: string,
+  to: string
+}
 
 export const userApi = createApi({
   reducerPath: "userApi",
@@ -18,6 +23,7 @@ export const userApi = createApi({
       query: () => "/auth/getAllUser",
       providesTags: ["Users"]
     }),
+
     signup: builder.mutation<User, UserBody>({
       query: (data: UserBody) => ({
         url: "/auth/signup",
@@ -25,8 +31,16 @@ export const userApi = createApi({
         body: data
       }),
       invalidatesTags: ["Users"]
+    }),
+
+    sendMessage: builder.mutation<undefined, MessageBody>({
+      query: (data: MessageBody) => ({
+        url: "/message/sendMessage",
+        method: "POST",
+        body: data
+      })
     })
   })
 })
 
-export const { useGetUsersQuery, useSignupMutation } = userApi;
+export const { useGetUsersQuery, useSignupMutation, useSendMessageMutation } = userApi;

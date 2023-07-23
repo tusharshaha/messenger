@@ -22,7 +22,7 @@ interface Res {
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
   const dispatch = useDispatch<AppDispatch>();
-  const [signup, { isLoading, isSuccess, isError }] = useSignupMutation();
+  const [signup, { isLoading, isSuccess }] = useSignupMutation();
   const router = useRouter();
   useEffect(() => {
     if (isLoading) {
@@ -31,10 +31,7 @@ const Login = () => {
     if (isSuccess) {
       toast.success("Successfully Signup", { id: "signup" });
     }
-    if (isError) {
-      
-    }
-  }, [isError, isLoading, isSuccess])
+  }, [ isLoading, isSuccess])
   const onSubmit: SubmitHandler<IFormInput> = async signupData => {
     signup(signupData)
       .then(data => {

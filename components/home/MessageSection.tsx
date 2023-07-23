@@ -7,11 +7,17 @@ import { WebsocketContext } from '@/context/websocket.context';
 import { toast } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { useSendMessageMutation } from '@/redux/api/apiSlice';
+
+interface Res {
+  error: { data: { message: string } };
+}
 
 const MessageSection: React.FC = () => {
   const socket = useContext(WebsocketContext);
   const currentChat = useSelector((state: RootState) => state.chat.currentUser);
   const loginUser = useSelector((state: RootState) => state.auth.user);
+  const [sendMessage, { isLoading }] = useSendMessageMutation();
   const [showEmoji, setShowEmoji] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -48,6 +54,16 @@ const MessageSection: React.FC = () => {
       const updatedMsg = message.replace(regex, "");
       return setMessage(updatedMsg);
     }
+    sendMessage({
+      message,
+      from: loginUser._id,
+      to: currentChat._id
+    }).then(data => {
+      const resData = data as Res;
+      if (resData?.error?.data.message) {
+        toast.error(resData.error?.data?.message, { id: "sendMessage" });
+      }
+    });
     socket.emit("message", message);
     return setMessage('');
   }
@@ -89,7 +105,7 @@ const MessageSection: React.FC = () => {
               <BsEmojiSmile />
             </button>
             <input
-              type="text" placeholder='Write a message ...'
+              type="text" placeholder={`${isLoading ? "sending" : "Write a message"} ...`}
               className='rounded-full ps-12 pe-4 py-2 focus:outline-0 bg-sky-950 w-full'
               onKeyDown={handleKeyDown}
               value={message} onChange={(e) => setMessage(e.target.value)}
