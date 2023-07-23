@@ -1,3 +1,18 @@
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+  --bg-color: #17152c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -40,20 +55,21 @@
   @apply container mx-auto px-10
 }
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-  --bg-color: #17152c;
+.contacts{
+  @apply flex overflow-auto relative flex-col gap-2;
+  height: 85vh;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.contacts::-webkit-scrollbar{
+  width: 10px;
 }
+.contacts::-webkit-scrollbar-track{
+  background-color: #38405a;
+}
+.contacts::-webkit-scrollbar-thumb{
+  background-color: #1e2547;
+}
+
 
 
 body {
@@ -65,12 +81,3 @@ body {
   font-size: 12px !important;
 }
 
-::-webkit-scrollbar{
-  width: 10px;
-}
-::-webkit-scrollbar-track{
-  background-color: #38405a;
-}
-::-webkit-scrollbar-thumb{
-  background-color: #1e2547;
-}

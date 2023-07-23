@@ -12,7 +12,30 @@ const UserListSection: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const router = useRouter();
   const socket = useContext(WebsocketContext);
-  const filterUser = data?.filter((ele) => ele._id !== user.id)
+  const filterUsers = data?.filter((ele) => ele._id !== user.id);
+  const users = [
+    { _id: 1, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 2, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 3, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 4, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 5, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 6, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 7, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 8, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 9, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 10, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 11, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 12, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 13, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 14, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 15, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 16, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 17, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 18, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 19, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+    { _id: 20, name: "tus", avatar: "https://i.ibb.co/Z2bBfyD/avatar3.jpg" },
+
+  ]
   useEffect(() => {
     socket.on("connect", () => {
       console.log("connected")
@@ -28,11 +51,11 @@ const UserListSection: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (
-    <div className='w-25 overflow-y-auto scroll-smooth scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-blue-300 py-4 px-2 border-r border-slate-500'>
-      <div className='flex flex-col gap-2'>
+    <div className='w-25 py-4 px-2 border-r border-slate-500'>
+      <div className='contacts'>
         {isLoading && <p>Loading...</p>}
         {
-          data?.map(ele => <Link key={ele._id} className={router.query.user === ele._id ? "bg-sky-950": ''}  href={`/${ele._id}`}>
+          filterUsers?.map(ele => <Link key={ele._id} className={router.query.user === ele._id ? "bg-sky-950" : ''} href={`/${ele._id}`}>
             <div className='flex items-center gap-2 rounded p-2 border border-sky-950 hover:bg-sky-950 cursor-pointer'>
               <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
                 <Image src={ele.avatar} height={70} width={70} alt="avatar" />
@@ -44,6 +67,16 @@ const UserListSection: React.FC = () => {
             </div>
           </Link>)
         }
+      </div>
+      <div className=''>
+        <div className='flex items-center gap-2 rounded p-2 bg-sky-900'>
+          <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
+            <Image src={user.avatar} height={70} width={70} alt="avatar" />
+          </div>
+          <div>
+            <h5>{user.name} (You)</h5>
+          </div>
+        </div>
       </div>
     </div>
   );
