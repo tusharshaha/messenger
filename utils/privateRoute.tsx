@@ -10,7 +10,7 @@ const privateRoute = <P extends object>(Component: React.ComponentType<P>) => {
 
     useEffect(() => {
       if (!user.name) {
-        router.replace('/login');
+        router.replace('/signup');
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

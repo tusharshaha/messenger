@@ -6,10 +6,16 @@ export interface UserBody {
   email: string,
   password: string
 }
-interface MessageBody {
-  message: string,
+interface GetMessageBody {
   from: string,
   to: string
+}
+interface MessageBody extends GetMessageBody {
+  message: string,
+}
+interface Message {
+  fromSelf: Boolean,
+  message: string
 }
 
 export const userApi = createApi({
@@ -24,6 +30,7 @@ export const userApi = createApi({
       providesTags: ["Users"]
     }),
 
+    
     signup: builder.mutation<User, UserBody>({
       query: (data: UserBody) => ({
         url: "/auth/signup",
@@ -32,15 +39,23 @@ export const userApi = createApi({
       }),
       invalidatesTags: ["Users"]
     }),
-
+    
     sendMessage: builder.mutation<undefined, MessageBody>({
       query: (data: MessageBody) => ({
         url: "/message/sendMessage",
         method: "POST",
         body: data
       })
-    })
+    }),
+
+    getAllMessage: builder.mutation<Message[], GetMessageBody>({
+      query: (data: GetMessageBody) => ({
+        url: "/message/getAllMessage",
+        method: "POST",
+        body: data
+      }),
+    }),
   })
 })
 
-export const { useGetUsersQuery, useSignupMutation, useSendMessageMutation } = userApi;
+export const { useGetUsersQuery, useGetAllMessageMutation, useSignupMutation, useSendMessageMutation } = userApi;

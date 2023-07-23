@@ -7,7 +7,7 @@ import { WebsocketContext } from '@/context/websocket.context';
 import { toast } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import { useSendMessageMutation } from '@/redux/api/apiSlice';
+import { useGetAllMessageMutation, useSendMessageMutation } from '@/redux/api/apiSlice';
 
 interface Res {
   error: { data: { message: string } };
@@ -18,8 +18,20 @@ const MessageSection: React.FC = () => {
   const currentChat = useSelector((state: RootState) => state.chat.currentUser);
   const loginUser = useSelector((state: RootState) => state.auth.user);
   const [sendMessage, { isLoading }] = useSendMessageMutation();
+  const [getMessages, { isError }] = useGetAllMessageMutation();
   const [showEmoji, setShowEmoji] = useState(false);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    console.log(currentChat._id);
+    getMessages({ from: loginUser._id, to: currentChat._id })
+      .then(data => console.log(data))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentChat._id, loginUser._id])
+
+  useEffect(() => {
+    if (isError) toast.error("Can't get messages!", { id: "message_err" });
+  }, [isError])
 
   useEffect(() => {
     socket.on("connect", () => {
