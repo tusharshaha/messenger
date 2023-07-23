@@ -1,13 +1,15 @@
-import Layout from '@/components/home/Layout';
 import MessageSection from '@/components/home/MessageSection';
+import UserListSection from '@/components/home/UserListSection';
 import privateRoute from '@/utils/privateRoute';
 import React from 'react';
 
 const Home: React.FC = () => {
   return (
-    <Layout>
+    <div className='flex h-[100vh]'>
+      <UserListSection></UserListSection>
       <MessageSection></MessageSection>
-    </Layout>
+    </div>
+
   );
 };
 

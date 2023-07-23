@@ -5,17 +5,21 @@ import Image from 'next/image';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 import { WebsocketContext } from '@/context/websocket.context';
 import { toast } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 const MessageSection: React.FC = () => {
   const socket = useContext(WebsocketContext);
+  const currentChat = useSelector((state: RootState) => state.chat.currentUser);
+  const loginUser = useSelector((state: RootState) => state.auth.user);
   const [showEmoji, setShowEmoji] = useState(false);
   const [message, setMessage] = useState("");
 
-  useEffect(()=>{
-    socket.on("connect",()=>{
+  useEffect(() => {
+    socket.on("connect", () => {
       console.log("connected");
     });
-    socket.on("message", (data)=>{
+    socket.on("message", (data) => {
       console.log(data);
     })
     return () => {
@@ -23,9 +27,9 @@ const MessageSection: React.FC = () => {
       socket.off("connect");
       socket.off("message");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
-  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const handleEmojiPicker = () => {
     setShowEmoji(prev => !prev);
   }
@@ -36,7 +40,7 @@ const MessageSection: React.FC = () => {
   }
 
   const handleSendMessage = () => {
-    if(message.length === 0) return;
+    if (message.length === 0) return;
     const regex = /(?:\b(?:https?|ftp|file):\/\/)?(?:www\.)?\S+\.\S+\b/gi;
 
     if (regex.test(message)) {
@@ -53,16 +57,22 @@ const MessageSection: React.FC = () => {
       handleSendMessage();
     }
   };
+  if (!currentChat.name) {
+    return <div className='flex grow flex-col items-center justify-center gap-5'>
+      <h2>Welcome, {loginUser.name}!</h2>
+      <h4>Please Select a chat to Start Conversation.</h4>
+    </div>
+  }
   return (
     <div className='grow flex flex-col justify-between'>
       {/* top bar  */}
       <div className='flex items-center px-4 py-2 justify-between border-b border-slate-500 sticky top-0'>
         <div className='flex items-center gap-2'>
           <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
-            <Image src='/avatar.jpeg' height={70} width={70} alt="avatar" />
+            <Image src={currentChat.avatar} height={70} width={70} alt="avatar" />
           </div>
           <div>
-            <h4>Mijanur Rahaman</h4>
+            <h4>{currentChat.name}</h4>
             <span className='font-normal text-slate-300'>Active Now</span>
           </div>
         </div>
@@ -90,7 +100,7 @@ const MessageSection: React.FC = () => {
                 theme={Theme.DARK}
                 width={340} height={360}
                 onEmojiClick={handleEmojiClick}
-                previewConfig={{showPreview: false}}
+                previewConfig={{ showPreview: false }}
                 skinTonesDisabled
               /></div>
             }

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface User {
-  id: string,
+  _id: string,
   name: string,
   avatar: string
 }
@@ -16,11 +16,8 @@ export const userAuthSlice = createSlice({
       if(action.payload !== undefined){
         state.user = action.payload
       }
-    },
-    removeUser: (state) => {
-      state.user = {} as User
     }
   }
 })
-export const { addUser, removeUser } = userAuthSlice.actions;
+export const { addUser } = userAuthSlice.actions;
 export default userAuthSlice.reducer;

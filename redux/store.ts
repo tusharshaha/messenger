@@ -3,11 +3,13 @@ import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import storage from 'redux-persist/lib/storage';
 import userReducer from './features/user.reducer';
 import { userApi } from './api/apiSlice';
+import currentChatReducer from './features/currentChat.reducer';
 
 // combine all reducer with root reducer
 const rootReducer = combineReducers({
     [userApi.reducerPath]: userApi.reducer,
-    auth: userReducer
+    auth: userReducer,
+    chat: currentChatReducer
 })
 // configure redux persist
 const persistConfig = {
