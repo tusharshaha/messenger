@@ -1,4 +1,4 @@
-import { useSignupMutation } from '@/redux/api/apiSlice';
+import { useLoginMutation, useSignupMutation } from '@/redux/api/apiSlice';
 import { User, addUser } from '@/redux/features/user.reducer';
 import { AppDispatch, RootState } from '@/redux/store';
 import { useRouter } from 'next/router';
@@ -23,7 +23,8 @@ const Login = () => {
   const [tab, setTab] = useState('login');
   const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
   const dispatch = useDispatch<AppDispatch>();
-  const [signup, { isLoading, isSuccess, data }] = useSignupMutation();
+  const [signup, { isLoading, isSuccess }] = useSignupMutation();
+  const [login] = useLoginMutation();
   const router = useRouter();
   useEffect(() => {
     if (isLoading) {
@@ -34,17 +35,21 @@ const Login = () => {
     }
   }, [isLoading, isSuccess])
   const onSubmit: SubmitHandler<IFormInput> = async signupData => {
-    signup(signupData)
-      .then(data => {
-        const resData = data as Res;
-        console.log(resData);
-        if (resData?.error?.data.message) {
-          toast.error(resData.error?.data?.message, { id: "signup" });
-        } else {
-          dispatch(addUser(resData.data));
-        }
-      })
-    console.log(data);
+    if (tab === "signup") {
+      signup(signupData)
+        .then(data => {
+          const resData = data as Res;
+          console.log(resData);
+          if (resData?.error?.data.message) {
+            toast.error(resData.error?.data?.message, { id: "signup" });
+          } else {
+            dispatch(addUser(resData.data));
+          }
+        })
+    } else {
+      const { email, password } = signupData;
+      login({ email, password })
+    }
   };
   const user = useSelector((state: RootState) => state.auth.user);
 
@@ -75,8 +80,8 @@ const Login = () => {
             {tab === "signup" ? "Create" : "Login"} User
           </button>
           {
-            tab == "signup" ? <p className='text-white mt-5'>Already have account? <button type='button' onClick={()=>setTab("")} className="text-blue-600">Please Login</button></p>
-              : <p className='text-white mt-5'>Don&apos;t have account? <button type='button' onClick={()=>setTab("signup")} className="text-blue-600">Please Signup</button></p>
+            tab == "signup" ? <p className='text-white mt-5'>Already have account? <button type='button' onClick={() => setTab("")} className="text-blue-600">Please Login</button></p>
+              : <p className='text-white mt-5'>Don&apos;t have account? <button type='button' onClick={() => setTab("signup")} className="text-blue-600">Please Signup</button></p>
           }
         </form>
       </div>

@@ -1,10 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { User } from "../features/user.reducer";
 
-export interface UserBody {
-  name: string,
+interface LoginBody {
   email: string,
   password: string
+}
+interface SignupBody extends LoginBody {
+  name: string,
 }
 interface GetMessageBody {
   from: string,
@@ -14,7 +16,7 @@ interface MessageBody extends GetMessageBody {
   message: string,
 }
 interface Message {
-  fromSelf: Boolean,
+  fromSelf: boolean,
   message: string
 }
 
@@ -31,9 +33,18 @@ export const userApi = createApi({
     }),
 
     
-    signup: builder.mutation<User, UserBody>({
-      query: (data: UserBody) => ({
+    signup: builder.mutation<User, SignupBody>({
+      query: (data: SignupBody) => ({
         url: "/auth/signup",
+        method: "POST",
+        body: data
+      }),
+      invalidatesTags: ["Users"]
+    }),
+
+    login: builder.mutation<User, LoginBody>({
+      query: (data)=> ({
+        url: "/auth/login",
         method: "POST",
         body: data
       }),
@@ -58,4 +69,4 @@ export const userApi = createApi({
   })
 })
 
-export const { useGetUsersQuery, useGetAllMessageMutation, useSignupMutation, useSendMessageMutation } = userApi;
+export const { useGetUsersQuery, useGetAllMessageMutation, useSignupMutation, useSendMessageMutation, useLoginMutation } = userApi;
