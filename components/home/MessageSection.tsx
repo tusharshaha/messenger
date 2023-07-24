@@ -23,11 +23,13 @@ const MessageSection: React.FC = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    (async () => {
-      await getMessages({ from: loginUser._id, to: currentChat._id })
-    })()
-    if (isError) {
-      toast.error("Can't get messages!", { id: "message_error" });
+    if(currentChat._id){
+      (async () => {
+        await getMessages({ from: loginUser._id, to: currentChat._id })
+      })()
+      if (isError) {
+        toast.error("Can't get messages!", { id: "message_error" });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChat._id, loginUser._id])

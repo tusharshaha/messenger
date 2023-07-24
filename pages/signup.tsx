@@ -39,7 +39,6 @@ const Login = () => {
       signup(signupData)
         .then(data => {
           const resData = data as Res;
-          console.log(resData);
           if (resData?.error?.data.message) {
             toast.error(resData.error?.data?.message, { id: "signup" });
           } else {
@@ -49,6 +48,14 @@ const Login = () => {
     } else {
       const { email, password } = signupData;
       login({ email, password })
+      .then(data => {
+        const resData = data as Res;
+        if (resData?.error?.data.message) {
+          toast.error(resData.error?.data?.message, { id: "login" });
+        } else {
+          dispatch(addUser(resData.data));
+        }
+      })
     }
   };
   const user = useSelector((state: RootState) => state.auth.user);

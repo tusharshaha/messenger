@@ -53,7 +53,7 @@ const UserListSection: React.FC = () => {
           </div>
           <div className='flex flex-col gap-2'>
             <h5>{user.name} (You)</h5>
-            <button title='Logout' onClick={()=>dispatch(removeUser)} className='text-2xl text-blue-400'>
+            <button title='Logout' onClick={()=>dispatch(removeUser())} className='text-2xl text-blue-400'>
               <BiExit />
             </button>
           </div>
