@@ -11,7 +11,7 @@ const Home: React.FC = () => {
   const loginUser = useSelector((state: RootState) => state.auth.user);
   const socket = useContext(WebsocketContext);
   useEffect(() => {
-
+    socket.emit("add-user", currentChat._id);
     return () => {
       console.log("unregister");
       socket.off("connect");
@@ -22,7 +22,11 @@ const Home: React.FC = () => {
   return (
     <div className='flex h-[100vh]'>
       <UserListSection currentUser={currentChat} />
-      <MessageSection currentChat={currentChat} loginUser={loginUser} />
+      <MessageSection
+        currentChat={currentChat}
+        loginUser={loginUser}
+        socket={socket}
+      />
     </div>
 
   );

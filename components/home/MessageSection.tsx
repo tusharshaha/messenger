@@ -7,6 +7,7 @@ import { WebsocketContext } from '@/context/websocket.context';
 import { toast } from 'react-hot-toast';
 import { useGetAllMessageMutation, useSendMessageMutation } from '@/redux/api/apiSlice';
 import { User } from '@/redux/features/user.reducer';
+import { Socket } from 'socket.io-client';
 
 interface Res {
   error: { data: { message: string } };
@@ -14,7 +15,8 @@ interface Res {
 
 interface Props {
   currentChat: User;
-  loginUser: User
+  loginUser: User;
+  socket: Socket;
 }
 
 const MessageSection: React.FC<Props> = ({currentChat, loginUser}) => {
