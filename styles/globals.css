@@ -44,7 +44,7 @@
   }
 
   p {
-    @apply text-base leading-[10px];
+    @apply text-base leading-[18px];
   }
   span {
     @apply text-[0.80rem] font-thin
@@ -60,6 +60,29 @@
   height: 85vh;
 }
 
+.chat-message{
+  @apply flex gap-2 overflow-auto mx-5 flex-col
+}
+
+.chat-message > .message{
+  @apply flex items-center
+}
+
+.message > .message-container{
+  @apply flex break-words p-2 rounded max-w-lg overflow-hidden
+}
+
+.send{
+  @apply justify-end
+}
+
+.recieved{
+  @apply justify-start
+}
+
+.chat-message::-webkit-scrollbar{
+  display: none;
+}
 .contacts::-webkit-scrollbar{
   width: 10px;
 }

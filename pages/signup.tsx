@@ -2,7 +2,7 @@ import { useSignupMutation } from '@/redux/api/apiSlice';
 import { User, addUser } from '@/redux/features/user.reducer';
 import { AppDispatch, RootState } from '@/redux/store';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';

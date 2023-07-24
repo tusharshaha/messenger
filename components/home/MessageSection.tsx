@@ -18,20 +18,20 @@ const MessageSection: React.FC = () => {
   const currentChat = useSelector((state: RootState) => state.chat.currentUser);
   const loginUser = useSelector((state: RootState) => state.auth.user);
   const [sendMessage, { isLoading }] = useSendMessageMutation();
-  const [getMessages, { isError }] = useGetAllMessageMutation();
+  const [getMessages, { isError, data: messages }] = useGetAllMessageMutation();
   const [showEmoji, setShowEmoji] = useState(false);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    console.log(currentChat._id);
-    getMessages({ from: loginUser._id, to: currentChat._id })
-      .then(data => console.log(data))
+    (async () => {
+      await getMessages({ from: loginUser._id, to: currentChat._id })
+    })()
+    if (isError) {
+      toast.error("Can't get messages!", { id: "message_error" });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChat._id, loginUser._id])
 
-  useEffect(() => {
-    if (isError) toast.error("Can't get messages!", { id: "message_err" });
-  }, [isError])
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -108,6 +108,16 @@ const MessageSection: React.FC = () => {
           <button><IoCall /></button>
           <button><IoVideocam /></button>
         </div>
+      </div>
+      {/* message section  */}
+      <div className='chat-message'>
+        {
+          messages?.map((ele, i) => <div key={i} className={`${ele.fromSelf ? "send" : "recieved"} message`}>
+            <div className={`${ele.fromSelf ? "bg-blue-700" : "bg-sky-600"} message-container`}>
+              <p>{ele.message}</p>
+            </div>
+          </div>)
+        }
       </div>
       {/* bottom bar  */}
       <div className='sticky bottom-0 px-4 py-5'>
