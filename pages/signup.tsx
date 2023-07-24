@@ -2,7 +2,7 @@ import { useSignupMutation } from '@/redux/api/apiSlice';
 import { User, addUser } from '@/redux/features/user.reducer';
 import { AppDispatch, RootState } from '@/redux/store';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
@@ -20,9 +20,10 @@ interface Res {
 }
 
 const Login = () => {
+  const [tab, setTab] = useState('login');
   const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
   const dispatch = useDispatch<AppDispatch>();
-  const [signup, { isLoading, isSuccess }] = useSignupMutation();
+  const [signup, { isLoading, isSuccess, data }] = useSignupMutation();
   const router = useRouter();
   useEffect(() => {
     if (isLoading) {
@@ -31,7 +32,7 @@ const Login = () => {
     if (isSuccess) {
       toast.success("Successfully Signup", { id: "signup" });
     }
-  }, [ isLoading, isSuccess])
+  }, [isLoading, isSuccess])
   const onSubmit: SubmitHandler<IFormInput> = async signupData => {
     signup(signupData)
       .then(data => {
@@ -39,10 +40,11 @@ const Login = () => {
         console.log(resData);
         if (resData?.error?.data.message) {
           toast.error(resData.error?.data?.message, { id: "signup" });
-        }else {
+        } else {
           dispatch(addUser(resData.data));
         }
       })
+    console.log(data);
   };
   const user = useSelector((state: RootState) => state.auth.user);
 
@@ -55,8 +57,13 @@ const Login = () => {
       <div className='rounded p-10 bg-black text-center w-1/3'>
         <h3 className='font-bold text-white uppercase'>Talky</h3>
         <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col mt-10 text-black'>
-          <input {...register("name", { required: true })} className='focus:outline-0 border-4 border-indigo-600 py-1 px-4 rounded mb-5' placeholder='Your Name' />
-          {errors.name && <span className='text-red-400 text-start mt-[-15px] mb-2'>Name is Required</span>}
+
+          {
+            tab === "signup" && <>
+              <input {...register("name", { required: true })} className='focus:outline-0 border-4 border-indigo-600 py-1 px-4 rounded mb-5' placeholder='Your Name' />
+              {errors.name && <span className='text-red-400 text-start mt-[-15px] mb-2'>Name is Required</span>}
+            </>
+          }
 
           <input type='email' {...register("email", { required: true })} className='focus:outline-0 border-4 border-indigo-600 py-1 px-4 rounded mb-5' placeholder='Your Email' />
           {errors.email && <span className='text-red-400 text-start mt-[-15px] mb-2'>Email is Required</span>}
@@ -65,8 +72,12 @@ const Login = () => {
 
           <button type='submit' disabled={isLoading} className="px-5 py-2 bg-indigo-600 transition duration-300 hover:bg-indigo-700 text-white uppercase rounded flex items-center justify-center gap-2">
             {isLoading && <span className='inline-block w-[20px] h-[20px] rounded-full border-4 border-blue-400 border-t-blue-200 animate-spin' />}
-            Create User
+            {tab === "signup" ? "Create" : "Login"} User
           </button>
+          {
+            tab == "signup" ? <p className='text-white mt-5'>Already have account? <button type='button' onClick={()=>setTab("")} className="text-blue-600">Please Login</button></p>
+              : <p className='text-white mt-5'>Don&apos;t have account? <button type='button' onClick={()=>setTab("signup")} className="text-blue-600">Please Signup</button></p>
+          }
         </form>
       </div>
     </div>
