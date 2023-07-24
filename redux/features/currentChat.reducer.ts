@@ -10,11 +10,14 @@ export const userAuthSlice = createSlice({
   initialState,
   reducers: {
     addCUser: (state, action: PayloadAction<User>) => {
-      if(action.payload !== undefined){
+      if (action.payload !== undefined) {
         state.currentUser = action.payload
       }
+    },
+    removeCUser: (state) => {
+      state.currentUser = {} as User;
     }
   }
 })
-export const { addCUser } = userAuthSlice.actions;
+export const { addCUser, removeCUser } = userAuthSlice.actions;
 export default userAuthSlice.reducer;

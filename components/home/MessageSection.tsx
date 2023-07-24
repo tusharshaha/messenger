@@ -5,18 +5,20 @@ import Image from 'next/image';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
 import { WebsocketContext } from '@/context/websocket.context';
 import { toast } from 'react-hot-toast';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
 import { useGetAllMessageMutation, useSendMessageMutation } from '@/redux/api/apiSlice';
+import { User } from '@/redux/features/user.reducer';
 
 interface Res {
   error: { data: { message: string } };
 }
 
-const MessageSection: React.FC = () => {
+interface Props {
+  currentChat: User;
+  loginUser: User
+}
+
+const MessageSection: React.FC<Props> = ({currentChat, loginUser}) => {
   const socket = useContext(WebsocketContext);
-  const currentChat = useSelector((state: RootState) => state.chat.currentUser);
-  const loginUser = useSelector((state: RootState) => state.auth.user);
   const [sendMessage, { isLoading }] = useSendMessageMutation();
   const [getMessages, { isError, data: messages }] = useGetAllMessageMutation();
   const [showEmoji, setShowEmoji] = useState(false);

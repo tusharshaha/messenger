@@ -1,35 +1,22 @@
 import { WebsocketContext } from '@/context/websocket.context';
 import { useGetUsersQuery } from '@/redux/api/apiSlice';
-import { addCUser } from '@/redux/features/currentChat.reducer';
+import { addCUser, removeCUser } from '@/redux/features/currentChat.reducer';
 import { RootState } from '@/redux/store';
 import Image from 'next/image';
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BiExit } from "react-icons/bi";
-import { removeUser } from '@/redux/features/user.reducer';
+import { User, removeUser } from '@/redux/features/user.reducer';
 
-const UserListSection: React.FC = () => {
-  const { data, isLoading, refetch } = useGetUsersQuery();
+const UserListSection: React.FC<{currentUser: User}> = ({currentUser}) => {
+  const { data, isLoading } = useGetUsersQuery();
   const dispatch = useDispatch();
-  const currentUser = useSelector((state: RootState) => state.chat.currentUser)
   const user = useSelector((state: RootState) => state.auth.user);
-  const socket = useContext(WebsocketContext);
   const filterUsers = data?.filter((ele) => ele._id !== user._id);
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("connected")
-    })
-    socket.on("newUser", () => {
-      
-    })
-    return () => {
-      console.log("unregister");
-      socket.off("connect");
-      socket.off("message");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  
+  const handleLogout = ()=>{
+    dispatch(removeUser());
+    dispatch(removeCUser());
+  }
   return (
     <div className='w-25 py-4 px-2 border-r border-slate-500'>
       <div className='contacts'>
@@ -53,7 +40,7 @@ const UserListSection: React.FC = () => {
           </div>
           <div className='flex flex-col gap-2'>
             <h5>{user.name} (You)</h5>
-            <button title='Logout' onClick={()=>dispatch(removeUser())} className='text-2xl text-blue-400'>
+            <button title='Logout' onClick={handleLogout} className='text-2xl text-blue-400'>
               <BiExit />
             </button>
           </div>
