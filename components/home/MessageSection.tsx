@@ -3,7 +3,6 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { IoSend, IoCall, IoVideocam } from "react-icons/io5";
 import Image from 'next/image';
 import EmojiPicker, { EmojiClickData, Theme } from 'emoji-picker-react';
-import { WebsocketContext } from '@/context/websocket.context';
 import { toast } from 'react-hot-toast';
 import { useGetAllMessageMutation, useSendMessageMutation } from '@/redux/api/apiSlice';
 import { User } from '@/redux/features/user.reducer';
@@ -11,6 +10,12 @@ import { Socket } from 'socket.io-client';
 
 interface Res {
   error: { data: { message: string } };
+  data: []
+}
+
+interface Message {
+  fromSelf: boolean,
+  message: string
 }
 
 interface Props {
@@ -19,40 +24,37 @@ interface Props {
   socket: Socket;
 }
 
-const MessageSection: React.FC<Props> = ({currentChat, loginUser}) => {
-  const socket = useContext(WebsocketContext);
+const MessageSection: React.FC<Props> = ({ currentChat, loginUser, socket }) => {
   const [sendMessage, { isLoading }] = useSendMessageMutation();
-  const [getMessages, { isError, data: messages }] = useGetAllMessageMutation();
-  const [showEmoji, setShowEmoji] = useState(false);
+  const [getMessages] = useGetAllMessageMutation();
+  const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState("");
+  const [recieveMessage, setRecieveMessage] = useState({});
+  const [showEmoji, setShowEmoji] = useState(false);
 
+  // get chat messages 
   useEffect(() => {
-    if(currentChat._id){
-      (async () => {
-        await getMessages({ from: loginUser._id, to: currentChat._id })
-      })()
-      if (isError) {
-        toast.error("Can't get messages!", { id: "message_error" });
-      }
+    if (currentChat._id) {
+      getMessages({ from: loginUser._id, to: currentChat._id })
+        .then(data => {
+          const resData = data as Res;
+          if (resData?.error?.data.message) {
+            toast.error(resData.error?.data?.message, { id: "sendMessage" });
+          } else {
+            setMessages(resData.data);
+          }
+        });
     }
+    const handleMessageReceived = (msg: string) => {
+      setRecieveMessage({ fromSelf: false, message: msg });
+    }
+    socket.on("recieved-msg", handleMessageReceived);
+
+    return () => {
+      socket.off("recieved-msg", handleMessageReceived);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChat._id, loginUser._id])
-
-
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("connected");
-    });
-    socket.on("message", (data) => {
-      console.log(data);
-    })
-    return () => {
-      console.log("unregister");
-      socket.off("connect");
-      socket.off("message");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const handleEmojiPicker = () => {
     setShowEmoji(prev => !prev);
@@ -82,8 +84,15 @@ const MessageSection: React.FC<Props> = ({currentChat, loginUser}) => {
         toast.error(resData.error?.data?.message, { id: "sendMessage" });
       }
     });
-    socket.emit("message", message);
-    return setMessage('');
+    socket.emit("send-msg", {
+      message,
+      from: loginUser._id,
+      to: currentChat._id
+    });
+    const msg = [...messages];
+    msg.push({ fromSelf: true, message })
+    setMessages(msg);
+    setMessage('');
   }
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter' && !e.shiftKey) {
