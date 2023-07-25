@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { BsEmojiSmile } from "react-icons/bs";
 import { IoSend, IoCall, IoVideocam } from "react-icons/io5";
 import Image from 'next/image';
@@ -29,8 +29,9 @@ const MessageSection: React.FC<Props> = ({ currentChat, loginUser, socket }) => 
   const [getMessages] = useGetAllMessageMutation();
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState("");
-  const [recieveMessage, setRecieveMessage] = useState({});
+  const [recieveMessage, setRecieveMessage] = useState<Message>({} as Message);
   const [showEmoji, setShowEmoji] = useState(false);
+  const scrollRef = useRef<HTMLDivElement | null>(null);;
 
   // get chat messages 
   useEffect(() => {
@@ -45,16 +46,23 @@ const MessageSection: React.FC<Props> = ({ currentChat, loginUser, socket }) => 
           }
         });
     }
-    const handleMessageReceived = (msg: string) => {
-      setRecieveMessage({ fromSelf: false, message: msg });
-    }
-    socket.on("recieved-msg", handleMessageReceived);
-
-    return () => {
-      socket.off("recieved-msg", handleMessageReceived);
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChat._id, loginUser._id])
+
+  useEffect(() => {
+    socket.on("recieved-msg", (msg: string) => {
+      setRecieveMessage({ fromSelf: false, message: msg });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    recieveMessage && setMessages((prev) => [...prev, recieveMessage]);
+  }, [recieveMessage]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleEmojiPicker = () => {
     setShowEmoji(prev => !prev);
@@ -109,7 +117,7 @@ const MessageSection: React.FC<Props> = ({ currentChat, loginUser, socket }) => 
   return (
     <div className='grow flex flex-col justify-between'>
       {/* top bar  */}
-      <div className='flex items-center px-4 py-2 justify-between border-b border-slate-500 sticky top-0'>
+      <div className='flex items-center px-4 py-2 justify-between bg-sky-900 sticky top-0'>
         <div className='flex items-center gap-2'>
           <div className='w-[50px] h-[50px] rounded-full overflow-hidden'>
             <Image src={currentChat.avatar} height={70} width={70} alt="avatar" />
@@ -125,7 +133,7 @@ const MessageSection: React.FC<Props> = ({ currentChat, loginUser, socket }) => 
         </div>
       </div>
       {/* message section  */}
-      <div className='chat-message'>
+      <div ref={scrollRef} className='chat-message'>
         {
           messages?.map((ele, i) => <div key={i} className={`${ele.fromSelf ? "send" : "recieved"} message`}>
             <div className={`${ele.fromSelf ? "bg-blue-700" : "bg-sky-600"} message-container`}>

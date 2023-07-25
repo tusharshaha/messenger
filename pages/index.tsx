@@ -11,14 +11,12 @@ const Home: React.FC = () => {
   const loginUser = useSelector((state: RootState) => state.auth.user);
   const socket = useContext(WebsocketContext);
   useEffect(() => {
-    socket.emit("add-user", currentChat._id);
+    socket.emit("add-user", loginUser._id);
     return () => {
       console.log("unregister");
-      socket.off("connect");
-      socket.off("message");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [loginUser])
   return (
     <div className='flex h-[100vh]'>
       <UserListSection currentUser={currentChat} />
