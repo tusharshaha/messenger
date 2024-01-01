@@ -61,7 +61,10 @@ const MessageSection: React.FC<Props> = ({ currentChat, loginUser, socket }) => 
   }, [recieveMessage]);
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
   }, [messages]);
 
   const handleEmojiPicker = () => {
